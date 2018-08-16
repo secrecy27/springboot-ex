@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>수정페이지</title>
+    <style type="text/css">
+        #mainContent div.form-group {margin-bottom: 6px;}
+        #mainContent div.form-group > label {font-size:12px; font-weight: bold;color: #333333;}
+    </style>
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!-- include summernote css/js -->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $("#i-body").summernote();
+            $('#fm-basic').on('submit', onBasicFormSubmit);
+
+        });
+
+        function onBasicFormSubmit(e) {
+            e.preventDefault();
+
+            let form = e.target, $form = $(form);
+            let id = parseInt(form['id'].value);
+
+
+            console.log("id : ",form['id'].value);
+            console.log("teamName : ",form['teamName'].value);
+
+            $.ajax(form['action'], {
+                contentType: 'application/x-www-form-urlencoded',
+                data:
+                    "seq="+form['id'].value+
+                    "&teamName="+form['teamName'].value
+                ,
+
+                type:'PUT',
+                dataType:'json'
+                })
+
+                .done(function(result) {
+                    location.href='/index/list';
+                    console.log("success : ",result);
+                }).fail(function(jqXHR) {
+                if (jqXHR.responseText) { alert(jqXHR.responseText); }
+            }).always(function() { });
+
+            return false;
+
+        }
+    </script>
+</head>
+<body>
+<div id="mainContent" layout:fragment="container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="layers bgc-white bd p-10 mB-20">
+                    <div class="layer w-100 bdB mb-1">
+                        <h5 class="lh-1">기본 정보(* 필수 입력)</h5>
+                    </div>
+                    <div class="layer w-100" style="position: relative;">
+                        <form id="fm-basic" action="/index/update/1" method="put" th:action="${'/index/update/'+result.seq}">
+                            <input type="hidden" name="id" th:value="${result.seq}">
+
+                            <div class="form-row">
+                                <div class="form-group col-6 col-md-3">
+                                    <label class="col-form-label">넘버</label>
+                                    <div>
+                                        <span class="text-dark" th:text="${result.seq}">1</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="i-title" class="col-form-label">이름</label>
+                                    <input type="text" name="teamName" class="form-control" required placeholder="제목" th:value="${result.teamName}">
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <div class="row">
+                                    <div class="col col-md-6 text-left">
+                                        <input type="submit" class="btn cur-p btn-outline-primary" value="저장">&nbsp;
+                                        <input type="reset" class="btn cur-p btn-outline-dark" value="초기화">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
