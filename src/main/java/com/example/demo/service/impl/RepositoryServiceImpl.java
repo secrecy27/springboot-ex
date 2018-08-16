@@ -37,7 +37,7 @@ public class RepositoryServiceImpl implements RepositoryService {
 
     @Override
     public Member addMember(Member member, int seq) {
-        return null;
+        return memberRepository.save(member);
     }
 
     @Override

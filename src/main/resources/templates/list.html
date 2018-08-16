@@ -3,41 +3,94 @@
 <head>
     <title>Getting Started: Handling Form Submission</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <script>
-        function onRemoveClick(e) {
-            console.log("console ; ",e);
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
-            // let $button = $(e.currentTarget), $tr = $button.parents('tr');
-            //
-            // if (!confirm($tr.find('td:eq(1)').text() + '(' + $tr.find('td:eq(2)').text() + ') 를 삭제하시겠습니까?')) {
-            //     return false;
-            // }
-            //
-            // $button.prop('disabled', true);
-            //
-            // $.ajax('/notice-boards/' + $tr.data('id'), {type:'DELETE', dataType:'json'})
-            //     .done(function() {
-            //         $tr.remove();
-            //
-            //         if ($vDataTable.children('tbody').find('tr').length === 0) {
-            //             location.reload(true);
-            //         }
-            //     }).fail(function(jqXHR) {
-            //     if (jqXHR.responseText) { alert(jqXHR.responseText); }
-            // }).always(function() { $button.prop('disabled', false); });
-            //
-            // return false;
+    <!-- 부가적인 테마 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        let $vDataTable = null;
+
+        $(document).ready(function() {
+            $vDataTable = $('#v-data-table');
+
+            $vDataTable.children('tbody').find('tr > td > button').on('click', onRemoveClick);
+        });
+
+        function onRemoveClick(e) {
+            e.preventDefault();
+
+            let $button = $(e.currentTarget), $tr = $button.parents('tr');
+
+            if (!confirm($tr.find('td:eq(1)').text() + '(' + $tr.find('td:eq(2)').text() + ') 를 삭제하시겠습니까?')) {
+                return false;
+            }
+
+            $button.prop('disabled', true);
+
+            $.ajax('/index/delete/' + $tr.data('id'), {type:'DELETE', dataType:'json'})
+                .done(function() {
+                    console.log("success");
+                    $tr.remove();
+
+                    if ($vDataTable.children('tbody').find('tr').length === 0) {
+                        location.reload(true);
+                    }
+                }).fail(function(jqXHR) {
+                if (jqXHR.responseText) { alert(jqXHR.responseText); }
+            }).always(function() { $button.prop('disabled', false); });
+
+            return false;
         }
     </script>
 </head>
 <body>
 <h1>Team List</h1>
-<tr th:each="team : ${teamList}">
-    <td th:text="${team.teamName}"></td>
-    <td th:inline="text"><button onclick="onRemoveClick([${team.seq}])"></button></td>
-</tr>
+<div id="mainContent" layout:fragment="container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="bgc-white bd bdrs-3 p-10 mB-20 dataTables_wrapper">
+                    <table id="v-data-table" class="table table-bordered table-hover table-sm">
+                        <colgroup>
+                            <col width="60"><col width="100"><col width="160">
+                            <col width="*"><col width="60"><col width="120"><col width="120"><col width="120">
+                            <col width="52">
+                        </colgroup>
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>넘버</th>
+                            <th>이름</th>
+                            <!--<th>내용요약</th>-->
+                            <th>버튼</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="as : ${teamList}" th:attr="data-id=${as.seq}" >
+                            <td th:text="${as.seq}">
+                            </td>
+                            <td>
+                                <a href="/index/read/1" th:href="${'/index/read/' + as.seq}" th:text="${as.teamName}">1</a>
+                            </td>
+                            <!--<td th:text="${as.createdTime}">내용</td>-->
+                            <td><button type="button" class="btn btn-sm cur-p btn-danger">삭제</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
 
-<a href="/form">팀 등록하기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="/index/form">팀 등록하기</a>
 
 </body>
 </html>
