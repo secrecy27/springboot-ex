@@ -81,32 +81,32 @@ public class IndexController {
         return "detail";
     }
 
-    //    @PutMapping(value="/update/{id:[\\d]+}")
-//    @ResponseBody
-//    public Boolean update(@ModelAttribute Team team, @PathVariable int id){
-//        Team teamContent=repositoryService.findTeamBySeq(id);
-//        System.out.println("team content : "+teamContent.getTeamName());
-//        System.out.println("team seq : "+team.getSeq());
-//        System.out.println("team name : "+team.getTeamName());
-//        teamContent.setTeamName(team.getTeamName());
-//        repositoryService.addTeam(teamContent);
-//        return Boolean.TRUE;
-//    }
     @PutMapping(value = "/update/{id:[\\d]+}")
     @ResponseBody
-    public Boolean update(@RequestBody MultiValueMap<String, String> team, @PathVariable int id) {
+    public Boolean update(@RequestBody MultiValueMap<String, String> teamName, @PathVariable int id) {
         Team teamContent = repositoryService.findTeamBySeq(id);
         System.out.println("team content : " + teamContent.getTeamName());
-        System.out.println("team seq : " + team.getFirst("teamName"));
-//        System.out.println("team name : " + team.getTeamName());
-        teamContent.setTeamName(team.getFirst("teamName"));
+        System.out.println("team seq : " + teamName.getFirst("teamName"));
+        teamContent.setTeamName(teamName.getFirst("teamName"));
         repositoryService.addTeam(teamContent);
         return Boolean.TRUE;
     }
+//    @PutMapping(value = "/update/{id:[\\d]+}")
+//    @ResponseBody
+//    public Boolean update(@RequestBody MultiValueMap<String, String> team, @PathVariable int id) {
+//        Team teamContent = repositoryService.findTeamBySeq(id);
+//        System.out.println("team content : " + teamContent.getTeamName());
+//        System.out.println("team seq : " + team.getFirst("teamName"));
+////        System.out.println("team name : " + team.getTeamName());
+//        teamContent.setTeamName(team.getFirst("teamName"));
+//        repositoryService.addTeam(teamContent);
+//        return Boolean.TRUE;
+//    }
 
     @DeleteMapping(value = "/delete/{id:[\\d]+}")
     @ResponseBody
     public Boolean remove(@PathVariable int id, @ModelAttribute Team team, @ModelAttribute Member member) {
+        System.out.println("team ; "+team.getTeamName());
         repositoryService.removeTeam(id);
         return Boolean.TRUE;
     }

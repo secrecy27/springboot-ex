@@ -34,7 +34,12 @@
 
             $button.prop('disabled', true);
 
-            $.ajax('/index/delete/' + $tr.data('id'), {type:'DELETE', dataType:'json'})
+            $.ajax('/index/delete/' + $tr.data('id'), {
+                    data: {
+                        seq:"123",
+                        teamName:"456"
+                    }
+                ,type:'DELETE', dataType:'json'})
                 .done(function() {
                     console.log("success");
                     $tr.remove();
@@ -67,7 +72,7 @@
                         <tr>
                             <th>넘버</th>
                             <th>이름</th>
-                            <!--<th>내용요약</th>-->
+                            <th>생성일</th>
                             <th>버튼</th>
                             <th></th>
                         </tr>
@@ -79,7 +84,7 @@
                             <td>
                                 <a href="/index/read/1" th:href="${'/index/read/' + as.seq}" th:text="${as.teamName}">1</a>
                             </td>
-                            <!--<td th:text="${as.createdTime}">내용</td>-->
+                            <td th:text="${as.createdTime}">내용</td>
                             <td><button type="button" class="btn btn-sm cur-p btn-danger">삭제</button></td>
                         </tr>
                         </tbody>

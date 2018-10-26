@@ -5,11 +5,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<h1>Result</h1>
+<h1>등록완료</h1>
 <p th:text="'seq: ' + ${result.seq}" />
 <p th:text="'teamName: ' + ${result.teamName}" />
-<a href="/index/form">팀 등록하기</a> |
-<a th:href="@{|/index/addUser/${result.seq}|}">이 팀의 구성 원등록하기</a>
+<a href="/index/list">목록으로</a> |
+<!--<a th:href="@{|/index/addUser/${result.seq}|}">이 팀의 구성 원등록하기</a>-->
 
 
 </body>

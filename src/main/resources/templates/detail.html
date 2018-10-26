@@ -40,21 +40,37 @@
 
             $.ajax(form['action'], {
                 contentType: 'application/x-www-form-urlencoded',
-                data:
-                    "seq="+form['id'].value+
-                    "&teamName="+form['teamName'].value
-                ,
-
+                data: {
+                    seq:form['id'].value,
+                    teamName:form['teamName'].value
+                },
                 type:'PUT',
                 dataType:'json'
-                })
-
+            })
                 .done(function(result) {
                     location.href='/index/list';
                     console.log("success : ",result);
                 }).fail(function(jqXHR) {
                 if (jqXHR.responseText) { alert(jqXHR.responseText); }
             }).always(function() { });
+
+            // $.ajax(form['action'], {
+            //     contentType: 'application/x-www-form-urlencoded',
+            //     data:
+            //         "seq="+form['id'].value+
+            //         "&teamName="+form['teamName'].value
+            //     ,
+            //
+            //     type:'PUT',
+            //     dataType:'json'
+            //     })
+            //
+            //     .done(function(result) {
+            //         location.href='/index/list';
+            //         console.log("success : ",result);
+            //     }).fail(function(jqXHR) {
+            //     if (jqXHR.responseText) { alert(jqXHR.responseText); }
+            // }).always(function() { });
 
             return false;
 
@@ -71,7 +87,7 @@
                         <h5 class="lh-1">기본 정보(* 필수 입력)</h5>
                     </div>
                     <div class="layer w-100" style="position: relative;">
-                        <form id="fm-basic" action="/index/update/1" method="put" th:action="${'/index/update/'+result.seq}">
+                        <form id="fm-basic" action="/index/update/1" method="post" th:action="${'/index/update/'+result.seq}">
                             <input type="hidden" name="id" th:value="${result.seq}">
 
                             <div class="form-row">
@@ -83,7 +99,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="i-title" class="col-form-label">이름</label>
-                                    <input type="text" name="teamName" class="form-control" required placeholder="제목" th:value="${result.teamName}">
+                                    <input type="text" name="teamName" id="i-title" class="form-control" required placeholder="제목" th:value="${result.teamName}">
                                 </div>
                             </div>
 
